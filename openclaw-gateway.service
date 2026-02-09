@@ -1,0 +1,25 @@
+[Unit]
+Description=OpenClaw Gateway
+Documentation=https://github.com/openclaw/vps-setup
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root
+ExecStart=/usr/bin/env openclaw gateway start --foreground
+ExecStop=/usr/bin/env openclaw gateway stop
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=openclaw-gateway
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/root/.openclaw /root/clawd /tmp
+
+[Install]
+WantedBy=multi-user.target
