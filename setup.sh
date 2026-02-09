@@ -62,14 +62,16 @@ banner
 
 echo "This script will:"
 echo "  1. Install Node.js 22 (if needed)"
-echo "  2. Install OpenClaw"
-echo "  3. Set up your Telegram bot"
-echo "  4. Start the gateway as a background service"
-echo "  5. Verify everything is working"
+echo "  2. Install Tailscale (secure networking)"
+echo "  3. Install OpenClaw"
+echo "  4. Set up your Telegram bot"
+echo "  5. Start the gateway as a background service"
+echo "  6. Verify everything is working"
 echo ""
 echo "You'll need:"
 echo "  • An Anthropic API key (from console.anthropic.com)"
 echo "  • A Telegram bot token (from @BotFather)"
+echo "  • A Tailscale account (free at tailscale.com)"
 echo ""
 read -rp "Ready? (y/n) " confirm
 [[ "$confirm" =~ ^[Yy] ]] || exit 0
@@ -99,7 +101,74 @@ else
 fi
 
 # ============================================================
-step "Step 2/6: Installing Node.js 22..."
+step "Step 2/7: Installing Tailscale..."
+
+if command -v tailscale &>/dev/null; then
+  echo "  ✓ Tailscale already installed"
+else
+  echo "  Installing Tailscale..."
+  curl -fsSL https://tailscale.com/install.sh | sh
+  echo "  ✓ Tailscale installed"
+fi
+
+# Check if Tailscale is connected
+if tailscale status &>/dev/null 2>&1; then
+  echo "  ✓ Tailscale is connected"
+  TS_IP=$(tailscale ip -4 2>/dev/null || echo "unknown")
+  echo "  Tailscale IP: $TS_IP"
+else
+  echo ""
+  echo -e "${CYAN}═══ Tailscale Login ═══${NC}"
+  echo "Tailscale needs to be authenticated."
+  echo "Run this in another terminal and follow the URL:"
+  echo ""
+  echo -e "  ${BOLD}sudo tailscale up --ssh${NC}"
+  echo ""
+  echo "The --ssh flag enables Tailscale SSH (no more managing SSH keys!)"
+  echo ""
+  read -rp "Press Enter once Tailscale is connected (or 's' to skip): " ts_confirm
+  if [[ "$ts_confirm" =~ ^[Ss] ]]; then
+    warn "Skipping Tailscale setup. You can run 'sudo tailscale up --ssh' later."
+  else
+    if tailscale status &>/dev/null 2>&1; then
+      TS_IP=$(tailscale ip -4 2>/dev/null || echo "unknown")
+      echo "  ✓ Tailscale connected! IP: $TS_IP"
+    else
+      warn "Tailscale doesn't appear connected yet. Continue anyway."
+    fi
+  fi
+fi
+
+# Lock down SSH to Tailscale only (optional)
+echo ""
+echo -e "${CYAN}═══ Security Hardening (Optional) ═══${NC}"
+echo "Recommended: Disable public SSH and only allow access via Tailscale."
+echo "This closes port 22 to the internet — you'd SSH via Tailscale IP instead."
+echo ""
+read -rp "Lock down SSH to Tailscale only? (y/n) " lock_ssh
+if [[ "$lock_ssh" =~ ^[Yy] ]]; then
+  # Allow SSH only on Tailscale interface
+  if command -v ufw &>/dev/null; then
+    TS_IFACE=$(tailscale status --json 2>/dev/null | python3 -c "import json,sys;print(json.load(sys.stdin).get('TailscaleIPs',[''])[0])" 2>/dev/null || echo "")
+    if [ -n "$TS_IFACE" ]; then
+      $SUDO ufw allow in on tailscale0 to any port 22 2>/dev/null
+      $SUDO ufw deny 22 2>/dev/null
+      $SUDO ufw allow 18789/tcp 2>/dev/null  # OpenClaw gateway
+      $SUDO ufw --force enable 2>/dev/null
+      echo "  ✓ SSH restricted to Tailscale. Public port 22 blocked."
+      echo "  ✓ OpenClaw gateway port (18789) allowed on Tailscale."
+    else
+      warn "Could not detect Tailscale IP. Skipping firewall changes."
+    fi
+  else
+    warn "ufw not found. Install it or manually configure your firewall."
+  fi
+else
+  echo "  Skipped. You can lock this down later."
+fi
+
+# ============================================================
+step "Step 3/7: Installing Node.js 22..."
 
 if command -v node &>/dev/null; then
   NODE_VER=$(node -v | sed 's/v//' | cut -d. -f1)
@@ -129,7 +198,7 @@ if [ "${INSTALL_NODE:-false}" = "true" ]; then
 fi
 
 # ============================================================
-step "Step 3/6: Installing OpenClaw..."
+step "Step 4/7: Installing OpenClaw..."
 
 if command -v openclaw &>/dev/null; then
   echo "  ✓ OpenClaw already installed, updating..."
@@ -142,7 +211,7 @@ fi
 echo "  ✓ OpenClaw $(openclaw --version 2>/dev/null || echo 'installed')"
 
 # ============================================================
-step "Step 4/6: Configuration"
+step "Step 5/7: Configuration"
 
 echo ""
 echo -e "${CYAN}═══ Anthropic API Key ═══${NC}"
@@ -169,7 +238,7 @@ echo -e "${CYAN}═══ Your Name ═══${NC}"
 prompt USER_NAME "What's your name?:"
 
 # ============================================================
-step "Step 5/6: Setting everything up..."
+step "Step 6/7: Setting everything up..."
 
 # Create workspace
 WORKSPACE="$HOME/clawd"
@@ -235,7 +304,7 @@ openclaw gateway install 2>/dev/null || true
 openclaw gateway start 2>/dev/null || true
 
 # ============================================================
-step "Step 6/6: Verifying installation..."
+step "Step 7/7: Verifying installation..."
 
 sleep 3
 
