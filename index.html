@@ -3,606 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🤖 Clawdbot Quick Setup</title>
+  <title>🤖 OpenClaw VPS Setup</title>
   <style>
-    :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #232736;
-      --border: #2e3348;
-      --text: #e1e4ed;
-      --text-dim: #8b90a5;
-      --accent: #6c8cff;
-      --accent-dim: #4a6ae0;
-      --green: #4ade80;
-      --yellow: #facc15;
-      --code-bg: #141620;
-      --step-line: #2e3348;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
-    }
-
-    /* Hero */
-    .hero {
-      text-align: center;
-      padding: 3rem 0 2rem;
-    }
-
-    .hero-emoji {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .hero h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero p {
-      color: var(--text-dim);
-      font-size: 1.15rem;
-    }
-
-    .hero .time-badge {
-      display: inline-block;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 0.3rem 1rem;
-      font-size: 0.85rem;
-      color: var(--green);
-      margin-top: 1rem;
-    }
-
-    /* Prerequisites */
-    .prereqs {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .prereqs h2 {
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-dim);
-      margin-bottom: 1rem;
-    }
-
-    .prereqs ul {
-      list-style: none;
-    }
-
-    .prereqs li {
-      padding: 0.4rem 0;
-      padding-left: 1.8rem;
-      position: relative;
-    }
-
-    .prereqs li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-weight: bold;
-    }
-
-    .prereqs a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s;
-    }
-
-    .prereqs a:hover {
-      border-bottom-color: var(--accent);
-    }
-
-    /* Steps */
-    .steps {
-      margin-top: 2.5rem;
-    }
-
-    .step {
-      position: relative;
-      padding-left: 3rem;
-      padding-bottom: 2.5rem;
-    }
-
-    .step:not(:last-child)::before {
-      content: '';
-      position: absolute;
-      left: 15px;
-      top: 36px;
-      bottom: 0;
-      width: 2px;
-      background: var(--step-line);
-    }
-
-    .step-number {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 32px;
-      height: 32px;
-      background: var(--accent);
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-    }
-
-    .step h2 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      padding-top: 3px;
-    }
-
-    .step p, .step li {
-      color: var(--text-dim);
-    }
-
-    .step p {
-      margin-bottom: 0.8rem;
-    }
-
-    .step ol, .step ul {
-      margin: 0.8rem 0;
-      padding-left: 1.5rem;
-    }
-
-    .step li {
-      padding: 0.25rem 0;
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 0;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .tab {
-      padding: 0.6rem 1.2rem;
-      cursor: pointer;
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      font-weight: 500;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-      transition: all 0.2s;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-    }
-
-    .tab:hover {
-      color: var(--text);
-    }
-
-    .tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    .tab-content {
-      display: none;
-      padding-top: 1rem;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .badge {
-      display: inline-block;
-      font-size: 0.7rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 10px;
-      margin-left: 0.5rem;
-      vertical-align: middle;
-    }
-
-    .badge-green {
-      background: rgba(74, 222, 128, 0.15);
-      color: var(--green);
-    }
-
-    .badge-yellow {
-      background: rgba(250, 204, 21, 0.15);
-      color: var(--yellow);
-    }
-
-    /* Code blocks */
-    pre {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem 1.2rem;
-      overflow-x: auto;
-      margin: 0.8rem 0;
-      position: relative;
-    }
-
-    code {
-      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.88rem;
-      color: var(--green);
-    }
-
-    p code, li code {
-      background: var(--code-bg);
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      color: var(--accent);
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 0.6rem;
-      right: 0.6rem;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-      background: var(--border);
-      color: var(--text);
-    }
-
-    /* Callout */
-    .callout {
-      background: var(--surface);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 8px 8px 0;
-      padding: 1rem 1.2rem;
-      margin: 1rem 0;
-    }
-
-    .callout.warn {
-      border-left-color: var(--yellow);
-    }
-
-    .callout.success {
-      border-left-color: var(--green);
-    }
-
-    .callout strong {
-      color: var(--text);
-    }
-
-    /* Commands table */
-    .cmd-grid {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin: 1rem 0;
-    }
-
-    .cmd-grid .cmd, .cmd-grid .desc {
-      padding: 0.7rem 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .cmd-grid .cmd:nth-last-child(-n+2),
-    .cmd-grid .desc:nth-last-child(-n+2) {
-      border-bottom: none;
-    }
-
-    .cmd-grid .cmd {
-      font-family: 'SF Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--green);
-      background: var(--code-bg);
-      white-space: nowrap;
-    }
-
-    .cmd-grid .desc {
-      color: var(--text-dim);
-      font-size: 0.9rem;
-    }
-
-    /* Troubleshooting */
-    details {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin: 0.5rem 0;
-    }
-
-    summary {
-      padding: 0.8rem 1.2rem;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      list-style: none;
-    }
-
-    summary::before {
-      content: '▸ ';
-      color: var(--accent);
-    }
-
-    details[open] summary::before {
-      content: '▾ ';
-    }
-
-    details > div {
-      padding: 0 1.2rem 1rem;
-      color: var(--text-dim);
-    }
-
-    /* Cost footer */
-    .cost {
-      margin-top: 3rem;
-      text-align: center;
-      padding: 2rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    .cost h3 {
-      margin-bottom: 0.8rem;
-      font-size: 1.1rem;
-    }
-
-    .cost-items {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .cost-item {
-      color: var(--text-dim);
-    }
-
-    .cost-item strong {
-      color: var(--text);
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      .container { padding: 1rem; }
-      .hero h1 { font-size: 1.7rem; }
-      .cost-items { flex-direction: column; gap: 0.5rem; }
-    }
+    :root { --bg:#0f1117; --surface:#1a1d27; --border:#2e3348; --text:#e1e4ed; --dim:#8b90a5; --accent:#6c8cff; --green:#4ade80; --yellow:#facc15; --code-bg:#141620; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,sans-serif; line-height:1.6; }
+    .container { max-width:800px; margin:0 auto; padding:40px 20px; }
+    h1 { font-size:2.2rem; margin-bottom:8px; }
+    h1 span { color:var(--accent); }
+    .subtitle { color:var(--dim); font-size:1.1rem; margin-bottom:32px; }
+    .one-liner { background:var(--code-bg); border:1px solid var(--border); border-radius:12px; padding:20px 24px; margin-bottom:40px; position:relative; }
+    .one-liner code { color:var(--green); font-size:1rem; font-family:'SF Mono',Monaco,monospace; word-break:break-all; }
+    .one-liner .label { color:var(--dim); font-size:0.8rem; margin-bottom:8px; display:block; }
+    .steps { display:flex; flex-direction:column; gap:24px; margin-bottom:40px; }
+    .step { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; }
+    .step-num { display:inline-block; background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; text-align:center; line-height:28px; font-size:0.85rem; font-weight:700; margin-right:10px; }
+    .step h3 { display:inline; font-size:1.1rem; }
+    .step p { color:var(--dim); margin-top:8px; }
+    .step code { background:var(--code-bg); padding:2px 8px; border-radius:4px; font-size:0.9rem; color:var(--green); }
+    .step ul { margin-top:8px; padding-left:20px; color:var(--dim); }
+    .step ul li { margin-bottom:4px; }
+    .badge { display:inline-block; background:#1a2e1a; color:var(--green); padding:2px 10px; border-radius:6px; font-size:0.8rem; font-weight:600; margin-left:8px; }
+    .badge.security { background:#2e2a1a; color:var(--yellow); }
+    .reqs { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:40px; }
+    .reqs h2 { font-size:1.2rem; margin-bottom:12px; }
+    .reqs li { color:var(--dim); margin-bottom:6px; list-style:none; }
+    .reqs li::before { content:"•"; color:var(--accent); margin-right:8px; }
+    .footer { text-align:center; color:var(--dim); font-size:0.85rem; margin-top:48px; padding-top:24px; border-top:1px solid var(--border); }
+    .footer a { color:var(--accent); text-decoration:none; }
+    .highlight { background:linear-gradient(135deg, rgba(108,140,255,0.1), rgba(74,222,128,0.1)); border:1px solid rgba(108,140,255,0.3); border-radius:12px; padding:20px 24px; margin-bottom:40px; }
+    .highlight h2 { font-size:1.1rem; margin-bottom:8px; }
+    .highlight p { color:var(--dim); }
   </style>
 </head>
 <body>
   <div class="container">
+    <h1>🤖 <span>OpenClaw</span> VPS Setup</h1>
+    <p class="subtitle">Go from fresh Ubuntu server → working AI assistant with Tailscale security in under 5 minutes.</p>
 
-    <!-- Hero -->
-    <div class="hero">
-      <span class="hero-emoji">🤖</span>
-      <h1>Clawdbot Quick Setup</h1>
-      <p>Set up your own AI assistant on a VPS with Telegram</p>
-      <span class="time-badge">⏱ ~5 minutes</span>
+    <div class="one-liner">
+      <span class="label">One-liner install:</span>
+      <code>curl -fsSL https://raw.githubusercontent.com/followmarkobot/openclaw-vps-setup/master/setup.sh | bash</code>
     </div>
 
-    <!-- Prerequisites -->
-    <div class="prereqs">
-      <h2>What You'll Need</h2>
+    <div class="highlight">
+      <h2>🔒 Secure by Default</h2>
+      <p>This setup includes <strong>Tailscale</strong> for zero-config VPN networking and optional SSH hardening — your bot is locked down from the start. No exposed ports, no password auth, just Tailscale mesh networking.</p>
+    </div>
+
+    <div class="reqs">
+      <h2>You'll need</h2>
       <ul>
-        <li>A <strong>VPS</strong> (cloud server) — ~$4-6/month</li>
-        <li>An <strong>Anthropic API key</strong> — from <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a></li>
-        <li>A <strong>Telegram account</strong> (free)</li>
+        <li>A fresh Ubuntu/Debian VPS (DigitalOcean, Hetzner, etc.)</li>
+        <li>An Anthropic API key — <a href="https://console.anthropic.com/settings/keys" style="color:var(--accent)">console.anthropic.com</a></li>
+        <li>A Telegram bot token — from <a href="https://t.me/BotFather" style="color:var(--accent)">@BotFather</a></li>
+        <li>A Tailscale account (free) — <a href="https://tailscale.com" style="color:var(--accent)">tailscale.com</a></li>
       </ul>
     </div>
 
-    <!-- Steps -->
     <div class="steps">
-
-      <!-- Step 1 -->
       <div class="step">
-        <div class="step-number">1</div>
-        <h2>Create Your VPS</h2>
-
-        <div class="tabs">
-          <button class="tab active" onclick="switchTab(this, 'do')">DigitalOcean <span class="badge badge-green">recommended</span></button>
-          <button class="tab" onclick="switchTab(this, 'hz')">Hetzner <span class="badge badge-yellow">cheapest</span></button>
-        </div>
-
-        <div class="tab-content active" id="tab-do">
-          <ol>
-            <li>Sign up at <a href="https://digitalocean.com" target="_blank">digitalocean.com</a></li>
-            <li>Click <strong>Create → Droplet</strong></li>
-            <li>Choose: <strong>Ubuntu 24.04</strong>, <strong>Regular $6/mo</strong> (1 GB RAM)</li>
-            <li>Pick a datacenter near you</li>
-            <li>Under Authentication, pick <strong>Password</strong></li>
-            <li>Click <strong>Create Droplet</strong></li>
-            <li>Copy the <strong>IP address</strong> it gives you</li>
-          </ol>
-        </div>
-
-        <div class="tab-content" id="tab-hz">
-          <ol>
-            <li>Sign up at <a href="https://www.hetzner.com/cloud" target="_blank">hetzner.com/cloud</a></li>
-            <li>Click <strong>Add Server</strong></li>
-            <li>Choose: <strong>Ubuntu 24.04</strong>, <strong>CX22</strong> (~€4/mo)</li>
-            <li>Set a root password</li>
-            <li>Click <strong>Create & Buy</strong></li>
-            <li>Copy the <strong>IP address</strong></li>
-          </ol>
-        </div>
+        <span class="step-num">1</span><h3>System Check</h3>
+        <p>Detects OS, checks if root, verifies compatibility with Ubuntu/Debian.</p>
       </div>
-
-      <!-- Step 2 -->
       <div class="step">
-        <div class="step-number">2</div>
-        <h2>Connect to Your VPS</h2>
-        <p>Open a terminal and SSH in:</p>
-        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>ssh root@YOUR_IP_ADDRESS</code></pre>
-        <p>Type <code>yes</code> when asked about the fingerprint, then enter your password.</p>
-
-        <div class="callout">
-          <strong>Windows users:</strong> Open PowerShell or install <a href="https://www.putty.org/" target="_blank" style="color: var(--accent);">PuTTY</a>. The ssh command works in modern PowerShell too.
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="step">
-        <div class="step-number">3</div>
-        <h2>Create a Telegram Bot</h2>
-        <ol>
-          <li>Open Telegram and search for <strong>@BotFather</strong></li>
-          <li>Send <code>/newbot</code></li>
-          <li>Pick a display name (e.g., "My AI Bot")</li>
-          <li>Pick a username (must end in <code>bot</code>, e.g., <code>myname_aibot</code>)</li>
-          <li>Save the <strong>token</strong> BotFather gives you</li>
-        </ol>
-
-        <div class="callout">
-          <strong>The token looks like:</strong> <code>7123456789:AAH...</code> — keep it secret!
-        </div>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="step">
-        <div class="step-number">4</div>
-        <h2>Run the Setup Script</h2>
-        <p>While SSH'd into your VPS, paste this one command:</p>
-        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>curl -fsSL https://raw.githubusercontent.com/YOUR_REPO/main/setup.sh | bash</code></pre>
-        <p>It will ask you for:</p>
+        <span class="step-num">2</span><h3>Tailscale</h3><span class="badge security">Security</span>
+        <p>Installs Tailscale for secure mesh networking. Optionally locks down SSH to Tailscale-only access.</p>
         <ul>
-          <li>Your <strong>Anthropic API key</strong></li>
-          <li>Your <strong>Telegram bot token</strong></li>
-          <li>A <strong>name</strong> for your bot</li>
-          <li><strong>Your name</strong></li>
+          <li>Runs <code>tailscale up --ssh</code> for SSH-over-Tailscale</li>
+          <li>Optional: blocks public port 22 via UFW</li>
+          <li>Opens OpenClaw gateway port on Tailscale interface</li>
         </ul>
-        <div class="callout success">
-          <strong>That's it!</strong> The script installs everything and starts your bot automatically.
-        </div>
       </div>
-
-      <!-- Step 5 -->
       <div class="step">
-        <div class="step-number">5</div>
-        <h2>Talk to Your Bot!</h2>
-        <ol>
-          <li>Open Telegram</li>
-          <li>Search for your bot's username</li>
-          <li>Send it a message</li>
-        </ol>
-        <div class="callout warn">
-          <strong>First message:</strong> You'll get a pairing code. Run this on your VPS to approve it:<br>
-          <code>clawdbot pairing list telegram</code><br>
-          <code>clawdbot pairing approve telegram &lt;code&gt;</code>
-        </div>
+        <span class="step-num">3</span><h3>Node.js 22</h3>
+        <p>Installs Node.js 22 via NodeSource if not already present. Skips if v22+ detected.</p>
       </div>
-
-    </div>
-
-    <!-- Useful commands -->
-    <h2 style="margin: 2rem 0 1rem; font-size: 1.3rem;">Useful Commands</h2>
-    <div class="cmd-grid">
-      <div class="cmd">clawdbot status</div>
-      <div class="desc">Check if everything is running</div>
-      <div class="cmd">clawdbot health</div>
-      <div class="desc">Detailed health check</div>
-      <div class="cmd">clawdbot gateway start</div>
-      <div class="desc">Start your bot</div>
-      <div class="cmd">clawdbot gateway stop</div>
-      <div class="desc">Stop your bot</div>
-      <div class="cmd">clawdbot gateway restart</div>
-      <div class="desc">Restart your bot</div>
-    </div>
-
-    <!-- Troubleshooting -->
-    <h2 style="margin: 2rem 0 1rem; font-size: 1.3rem;">Troubleshooting</h2>
-
-    <details>
-      <summary>Bot doesn't respond</summary>
-      <div>
-        <p>Run <code>clawdbot status</code> to check if the gateway is running.<br>
-        Run <code>clawdbot health</code> to see if auth is working.<br>
-        Double-check your API key is correct.</p>
+      <div class="step">
+        <span class="step-num">4</span><h3>OpenClaw</h3><span class="badge">Core</span>
+        <p>Installs OpenClaw globally via npm. The AI assistant runtime that powers your bot.</p>
       </div>
-    </details>
-
-    <details>
-      <summary>Got a "pairing code" message</summary>
-      <div>
-        <p>This is normal on first contact! Approve it:</p>
-        <pre><code>clawdbot pairing list telegram
-clawdbot pairing approve telegram &lt;code&gt;</code></pre>
+      <div class="step">
+        <span class="step-num">5</span><h3>Configuration</h3>
+        <p>Interactive prompts for your API keys, bot token, bot name, and your name. Writes config to <code>~/.openclaw/config.yaml</code>.</p>
       </div>
-    </details>
-
-    <details>
-      <summary>Need to start over</summary>
-      <div>
-        <p>Reset everything and re-run:</p>
-        <pre><code>rm -rf ~/.clawdbot ~/clawd
-curl -fsSL https://raw.githubusercontent.com/YOUR_REPO/main/setup.sh | bash</code></pre>
+      <div class="step">
+        <span class="step-num">6</span><h3>Launch</h3>
+        <p>Creates workspace at <code>~/clawd/</code> with starter files (SOUL.md, IDENTITY.md, USER.md). Installs and starts the gateway daemon.</p>
       </div>
-    </details>
-
-    <!-- Cost -->
-    <div class="cost">
-      <h3>💰 What It Costs</h3>
-      <div class="cost-items">
-        <div class="cost-item"><strong>VPS:</strong> ~$4-6/mo</div>
-        <div class="cost-item"><strong>Anthropic API:</strong> pay-per-use</div>
-        <div class="cost-item"><strong>Telegram:</strong> free</div>
+      <div class="step">
+        <span class="step-num">7</span><h3>Verify</h3>
+        <p>Post-install verification: checks CLI, config, gateway status, and workspace. Green checkmarks or warnings if something needs attention.</p>
       </div>
     </div>
 
+    <div class="reqs">
+      <h2>After Setup</h2>
+      <ul>
+        <li><code>openclaw status</code> — check everything is running</li>
+        <li><code>openclaw gateway stop</code> — stop the bot</li>
+        <li><code>openclaw gateway start</code> — start the bot</li>
+        <li><code>openclaw gateway restart</code> — restart after config changes</li>
+        <li>SSH into your VPS via Tailscale: <code>ssh root@your-vps-tailscale-ip</code></li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <p>Built by <a href="https://github.com/followmarkobot">followmarkobot</a> · <a href="https://github.com/followmarkobot/openclaw-vps-setup">View on GitHub</a></p>
+    </div>
   </div>
-
-  <script>
-    function switchTab(btn, id) {
-      const parent = btn.closest('.step');
-      parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + id).classList.add('active');
-    }
-
-    function copyCode(btn) {
-      const code = btn.parentElement.querySelector('code').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = 'Copy', 2000);
-      });
-    }
-  </script>
 </body>
 </html>
